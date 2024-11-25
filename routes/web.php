@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\UserLoginController;
+use App\Http\Controllers\Auth\AdminLoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +18,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('login', [UserLoginController::class, 'showLoginForm'])->name('login');
+Route::post('login', [UserLoginController::class, 'login']);
+Route::post('logout', [UserLoginController::class, 'logout'])->name('logout');
+
+
+Route::get('admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
+Route::post('admin/login', [AdminLoginController::class, 'login']);
+Route::post('admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
