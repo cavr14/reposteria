@@ -2,25 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminDashboardController;
-
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+use App\Http\Controllers\AdminAuthController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::put('/admin/update-status/{id}', [AdminDashboardController::class, 'updateStatus'])->name('admin.update-status');
 
-Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+
 
 Route::post('/admin/pedidos/{id}/status', function ($id) {
     $status = request('status');
@@ -28,14 +18,11 @@ Route::post('/admin/pedidos/{id}/status', function ($id) {
     return redirect()->back();
 })->name('admin.pedidos.status');
 
-// routes/web.php
 
 
+
+
+
+Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
+Route::post('/admin/login', [AdminAuthController::class, 'processLogin'])->name('admin.processLogin');
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-
-
-Route::middleware(['auth:admin'])->group(function () {
-    // Ruta para actualizar el estado de un pedido
-    Route::put('admin/pedidos/{pedido}/update-status', [AdminDashboardController::class, 'updateStatus'])->name('admin.update-status');
-});
-

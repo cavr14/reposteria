@@ -110,28 +110,27 @@
             </thead>
             <tbody>
                 @foreach ($pedidos as $pedido)
-                <tr>
-                    <td>{{ $pedido->cliente_id }}</td>
-                    <td>{{ $pedido->telefono }}</td>
-                    <td>{{ $pedido->producto }}</td>
-                    <td>{{ $pedido->sabor }}</td>
-                    <td>{{ $pedido->tamano_cantidad }}</td>
-                    <td>{{ $pedido->relleno }}</td>
-                    <td>{{ $pedido->status }}</td>
-                    <td>
-                    <form action="{{ route('admin.update-status', $pedido->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <select name="status">
-                            <option value="pendiente" {{ $pedido->status == 'pendiente' ? 'selected' : '' }}>Pendiente</option>
-                            <option value="en_proceso" {{ $pedido->status == 'en_proceso' ? 'selected' : '' }}>En Proceso</option>
-                            <option value="finalizado" {{ $pedido->status == 'finalizado' ? 'selected' : '' }}>Finalizado</option>
-                        </select>
-                        <button type="submit">Actualizar</button>
-                    </form>
-
-                    </td>
-                </tr>
+                    <tr>
+                        <td>{{ $pedido->cliente_id }}</td>
+                        <td>{{ $pedido->telefono }}</td>
+                        <td>{{ $pedido->producto }}</td>
+                        <td>{{ $pedido->sabor }}</td>
+                        <td>{{ $pedido->tamano_cantidad }}</td>
+                        <td>{{ $pedido->relleno }}</td>
+                        <td>{{ $pedido->status }}</td>
+                        <td>
+                            <form action="{{ route('admin.update-status', $pedido->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <select name="status">
+                                    <option value="pendiente" {{ $pedido->status == 'pendiente' ? 'selected' : '' }}>Pendiente</option>
+                                    <option value="en_proceso" {{ $pedido->status == 'en_proceso' ? 'selected' : '' }}>En Proceso</option>
+                                    <option value="finalizado" {{ $pedido->status == 'finalizado' ? 'selected' : '' }}>Finalizado</option>
+                                </select>
+                                <button type="submit">Actualizar</button>
+                            </form>
+                        </td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>
