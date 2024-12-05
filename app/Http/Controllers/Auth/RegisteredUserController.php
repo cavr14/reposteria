@@ -4,38 +4,39 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Validator;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function store(Request $request): Response
+    // Método para mostrar el formulario de registro
+    public function create()
     {
-        $request->validate([
+        return view('auth.register');  // Retorna la vista de registro
+    }
+
+    // Método para registrar al usuario (método POST)
+    public function store(Request $request)
+    {
+        // Validación de los datos del formulario
+        $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
+        // Crear el nuevo usuario en la base de datos
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
         ]);
 
-        event(new Registered($user));
+        // Iniciar sesión automáticamente después de registrarse (opcional)
+        auth()->login($user);
 
-        Auth::login($user);
-
-        return response()->noContent();
+        // Redirigir al usuario después de registrarse
+        return redirect(RouteServiceProvider::HOME);
     }
 }
