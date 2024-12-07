@@ -33,35 +33,43 @@ class PedidoController extends Controller
 
     // Almacenar un nuevo pedido y sus detalles
     public function store(Request $request)
-{
-    // Validación de los datos del formulario
-    $validated = $request->validate([
-        'ID_usuario' => 'required|integer',
-        'fecha_pedido' => 'required|date',
-        'fecha_entrega' => 'required|date',
-        'producto' => 'required|array',
-        'producto.*.ID_producto' => 'required|integer',
-        'producto.*.cantidad' => 'required|integer|min:1',
-        'producto.*.ID_size' => 'required|integer',
-        'producto.*.ID_sabor' => 'required|integer',
-        'producto.*.ID_top' => 'nullable|integer',
-        'producto.*.ID_relleno' => 'nullable|integer',
-        'producto.*.ID_cubierta' => 'nullable|integer',
-    ]);
-
-    // Convertir los productos a JSON
-    $productosJson = json_encode($request->producto);
-
-    // Llamada al procedimiento almacenado, añadiendo fecha_pedido
-    DB::select('CALL sp_crear_pedido(?, ?, ?, ?)', [
-        $request->ID_usuario,
-        $request->fecha_pedido,  // Añadido: fecha del pedido
-        $request->fecha_entrega,
-        $productosJson
-    ]);
-
-    // Redirigir o devolver mensaje de éxito
-    return redirect()->route('client.orders.index')->with('success', 'Pedido creado exitosamente');
-}
-
+    {
+        // Validación de los datos del formulario
+        $validated = $request->validate([
+            'ID_usuario' => 'required|integer',
+            'fecha_entrega' => 'required|date',
+            'productos' => 'required|array',
+            'productos.*.ID_producto' => 'required|integer',
+            'productos.*.cantidad' => 'required|integer|min:1',
+            'productos.*.ID_size' => 'required|integer',
+            'productos.*.ID_sabor' => 'required|integer',
+            'productos.*.ID_top' => 'nullable|integer',
+            'productos.*.ID_relleno' => 'nullable|integer',
+            'productos.*.ID_cubierta' => 'nullable|integer',
+        ]);
+    
+        // Crear el pedido principal
+        $pedido = Pedido::create([
+            'ID_usuario' => $validated['ID_usuario'],
+            'fecha_entrega' => $validated['fecha_entrega'],
+        ]);
+    
+        // Crear los detalles del pedido
+        foreach ($validated['productos'] as $producto) {
+            DetallePedido::create([
+                'ID_pedido' => $pedido->id,
+                'ID_producto' => $producto['ID_producto'],
+                'cantidad' => $producto['cantidad'],
+                'ID_size' => $producto['ID_size'],
+                'ID_sabor' => $producto['ID_sabor'],
+                'ID_top' => $producto['ID_top'] ?? null,
+                'ID_relleno' => $producto['ID_relleno'] ?? null,
+                'ID_cubierta' => $producto['ID_cubierta'] ?? null,
+            ]);
+        }
+    
+        // Redirigir con mensaje de éxito
+        return redirect()->route('client.orders.index')->with('success', 'Pedido creado exitosamente');
+    }
+    
 }
