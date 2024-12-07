@@ -29,8 +29,8 @@
             </div>
 
             <div class="form-group">
-                <label for="phone">Teléfono</label>
-                <input id="phone" type="text" name="phone" value="{{ auth()->user()->phone }}">
+                <label for="telefono">Teléfono</label>
+                <input id="telefono" type="text" name="telefono" value="{{ auth()->user()->telefono }}">
             </div>
 
             <div class="form-group">

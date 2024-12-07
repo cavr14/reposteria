@@ -23,11 +23,11 @@ class ProfileController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:15',
+            'telefono' => 'nullable|string|max:18',
             'domicilio' => 'nullable|string|max:80',
         ]);
 
-        auth()->user()->update($request->only('name', 'phone', 'domicilio'));
+        auth()->user()->update($request->only('name', 'telefono', 'domicilio'));
 
         return redirect()->back()->with('success', 'Perfil actualizado con éxito');
     }
@@ -37,10 +37,10 @@ class ProfileController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:15',
+            'telefono' => 'nullable|string|max:15',
         ]);
 
-        auth()->user()->update($request->only('name', 'phone'));
+        auth()->user()->update($request->only('name', 'telefono'));
 
         return redirect()->back()->with('success', 'Perfil de administrador actualizado con éxito');
     }

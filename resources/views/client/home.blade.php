@@ -157,7 +157,7 @@
             <a href="{{ route('client.orders.index') }}" class="btn">Ver Pedidos</a>
         </div>
 
-        <button onclick="window.location.href='{{ route('settings.edit') }}'">Ir a Configuración</button>
+        <button onclick="window.location.href='{{ route('client.settings.edit') }}'">Ir a Configuración</button>
     </div>
 </body>
 </html>

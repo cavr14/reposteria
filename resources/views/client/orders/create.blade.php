@@ -19,6 +19,11 @@
                         </select>
                     </div><br>
 
+                    <div class="form-group mb-3">
+                    <label for="fecha_pedido" class="form-label">Fecha de Pedido</label>
+                    <input type="date" name="fecha_pedido" id="fecha_pedido" class="form-control" required>
+                    </div>
+
                     <!-- Campo para seleccionar la fecha de entrega -->
                     <div class="form-group mb-3">
                         <label for="fecha_entrega" class="form-label">Fecha de Entrega</label>

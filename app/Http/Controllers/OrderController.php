@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers;
-
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\DB;
 use App\Models\Producto;
 use App\Models\Tamano;
@@ -33,19 +33,19 @@ class OrderController extends Controller
         $validatedData = $request->validate([
             'ID_usuario' => 'required|exists:users,id',
             'fecha_entrega' => 'required|date',
-            'productos' => 'required|array|min:1',
-            'productos.*.ID_producto' => 'required|exists:productos,ID',
-            'productos.*.cantidad' => 'required|integer|min:1',
-            'productos.*.ID_sabor' => 'required|exists:sabores,ID_Sabor',
-            'productos.*.ID_size' => 'required|exists:tamanos,ID_size',
-            'productos.*.ID_top' => 'nullable|exists:topping,ID_top',
-            'productos.*.ID_cubierta' => 'nullable|exists:cubierta,ID_cubierta',
-            'productos.*.ID_relleno' => 'nullable|exists:relleno,ID_relleno',
+            'producto' => 'required|array|min:1',
+            'producto.*.ID_producto' => 'required|exists:producto,ID',
+            'producto.*.cantidad' => 'required|integer|min:1',
+            'producto.*.ID_sabor' => 'required|exists:sabores,ID_Sabor',
+            'producto.*.ID_size' => 'required|exists:tamanos,ID_size',
+            'producto.*.ID_top' => 'nullable|exists:topping,ID_top',
+            'producto.*.ID_cubierta' => 'nullable|exists:cubierta,ID_cubierta',
+            'producto.*.ID_relleno' => 'nullable|exists:relleno,ID_relleno',
         ]);
 
         try {
             // Preparar los datos de productos como JSON
-            $productos = $request->input('productos');
+            $productos = $request->input('producto');
 
             // Llamar al procedimiento almacenado para crear el pedido
             DB::statement('CALL sp_crear_pedido(?, ?, ?)', [
