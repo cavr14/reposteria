@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PedidoController;
 use Illuminate\Support\Facades\Route;
 
 // Ruta para la página de dashboard
@@ -26,16 +27,17 @@ Route::middleware(['auth', 'verified'])->prefix('client')->name('client.')->grou
     Route::get('/settings', [ProfileController::class, 'editClient'])->name('settings.edit');
     Route::put('/settings', [ProfileController::class, 'updateClient'])->name('settings.update');
     
-     // Ruta para la página principal del cliente
-     Route::get('/home', function () {
+    // Ruta para la página principal del cliente
+    Route::get('/home', function () {
         return view('client.home');
     })->name('home');
 
     // Ruta para hacer un nuevo pedido
-    Route::get('/orders/create', function () {
-        return view('client.orders.create'); // Crear la vista para hacer pedidos
-    })->name('orders.create');
+    Route::get('/orders/create', [PedidoController::class, 'create'])->name('orders.create');
     
+    // Ruta para almacenar el pedido (usando la ruta generada por resource)
+    Route::post('/orders', [PedidoController::class, 'store'])->name('orders.store');
+
     // Ruta para ver los pedidos del cliente
     Route::get('/orders', function () {
         return view('client.orders.index'); // Crear la vista para ver los pedidos
