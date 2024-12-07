@@ -47,18 +47,29 @@ class PedidoController extends Controller
             'productos.*.ID_relleno' => 'nullable|integer',
             'productos.*.ID_cubierta' => 'nullable|integer',
         ]);
-
-        // Convertir los productos a JSON
-        $productosJson = json_encode($request->productos);
-
-        // Llamada al procedimiento almacenado
-        DB::select('CALL sp_crear_pedido(?, ?, ?)', [
-            $request->ID_usuario,
-            $request->fecha_entrega,
-            $productosJson
+    
+        // Crear el pedido principal
+        $pedido = Pedido::create([
+            'ID_usuario' => $validated['ID_usuario'],
+            'fecha_entrega' => $validated['fecha_entrega'],
         ]);
-
-        // Redirigir o devolver mensaje de éxito
+    
+        // Crear los detalles del pedido
+        foreach ($validated['productos'] as $producto) {
+            DetallePedido::create([
+                'ID_pedido' => $pedido->id,
+                'ID_producto' => $producto['ID_producto'],
+                'cantidad' => $producto['cantidad'],
+                'ID_size' => $producto['ID_size'],
+                'ID_sabor' => $producto['ID_sabor'],
+                'ID_top' => $producto['ID_top'] ?? null,
+                'ID_relleno' => $producto['ID_relleno'] ?? null,
+                'ID_cubierta' => $producto['ID_cubierta'] ?? null,
+            ]);
+        }
+    
+        // Redirigir con mensaje de éxito
         return redirect()->route('client.orders.index')->with('success', 'Pedido creado exitosamente');
     }
+    
 }
