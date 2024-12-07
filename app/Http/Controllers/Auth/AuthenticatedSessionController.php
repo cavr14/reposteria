@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -13,13 +12,27 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): Response
+    public function create()
     {
+        return view('auth.login'); // Asegúrate de tener la vista 'auth.login'
+    }
+    public function store(LoginRequest $request)
+    {
+        // Intenta autenticar al usuario
         $request->authenticate();
 
+        // Regenera la sesión para mayor seguridad
         $request->session()->regenerate();
 
-        return response()->noContent();
+        // Redirige según el tipo de usuario
+        $user = Auth::user();
+        if ($user->is_admin) {
+            // Si es administrador, redirige a la página de administrador
+            return redirect()->route('admin.home');
+        } else {
+            // Si es cliente, redirige a la página de cliente
+            return redirect()->route('client.home');
+        }
     }
 
     /**
@@ -27,12 +40,15 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): Response
     {
+        // Realiza logout del usuario
         Auth::guard('web')->logout();
 
+        // Invalida la sesión y regenera el token
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
+        // Responde con no content
         return response()->noContent();
     }
 }
+

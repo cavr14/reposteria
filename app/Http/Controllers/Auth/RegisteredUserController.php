@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Providers\RouteServiceProvider;
 
 class RegisteredUserController extends Controller
 {
@@ -36,7 +37,7 @@ class RegisteredUserController extends Controller
         // Iniciar sesión automáticamente después de registrarse (opcional)
         auth()->login($user);
 
-        // Redirigir al usuario después de registrarse
-        return redirect(RouteServiceProvider::HOME);
+        // Redirigir al usuario después de registrarse a la página de éxito
+        return redirect()->route('register.success');
     }
 }
