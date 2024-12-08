@@ -12,7 +12,10 @@ class Pedido extends Model
 
     // Si la tabla no sigue la convención plural de Laravel, puedes especificar el nombre de la tabla
     protected $table = 'pedido';
-     protected $primaryKey = 'ID_pedido';
+    protected $primaryKey = 'ID_pedido';
+
+    public $timestamps = false; // Deshabilitar timestamps
+
     // Especificar los campos que son "fillables" (masivos asignables)
     protected $fillable = [
         'fecha_pedido',
