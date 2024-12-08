@@ -11,6 +11,7 @@
         <!-- Aquí puedes agregar tu barra de navegación -->
         <ul>
             <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+            <li><a href="{{ route('client.home') }}">Inicio</a></li>
             <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Cerrar sesión</a></li>
         </ul>
     </nav>

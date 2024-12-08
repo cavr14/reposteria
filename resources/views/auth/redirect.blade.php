@@ -54,7 +54,7 @@
 </head>
 <body>
     <div class="navbar">
-        <a href="{{ route('login') }}" class="btn">Iniciar sesión</a>
+        <a href="{{ route('client.home') }}" class="btn">Iniciar sesión</a>
     </div>
     <div class="content">
         <h1>Cuenta Creada Exitosamente</h1>
