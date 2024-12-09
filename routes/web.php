@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PedidoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\WebhooksController;
 use App\Http\Controllers\AdminAuthController;
 use Illuminate\Http\Request;
 
@@ -83,11 +84,4 @@ Route::middleware('admin_auth')->prefix('admin')->name('admin.')->group(function
     Route::put('/settings', [ProfileController::class, 'updateAdmin'])->name('settings.update');
 });
 
-Route::post('/github-webhook', function (Request $request) {
-    // Lógica para manejar el webhook de GitHub
-    // Puedes registrar los datos recibidos en el log para depuración
-    \Log::info('Webhook recibido:', $request->all());
-
-    // Devuelve una respuesta exitosa
-    return response()->json(['status' => 'Webhook recibido correctamente'], 200);
-});
+Route::post('/github-webhook', [WebhooksController::class, 'handleGitHubWebhook']);
