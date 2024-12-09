@@ -7,6 +7,7 @@ use App\Http\Controllers\PedidoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminAuthController;
+use Illuminate\Http\Request;
 
 // Redirigir la ruta raíz al formulario de registro
 Route::get('/', function () {
@@ -71,6 +72,22 @@ require __DIR__.'/auth.php';
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'processLogin'])->name('admin.processLogin');
 
-Route::get('/admin/dashboard', function () {
-    return 'Bienvenido al dashboard de administrador';
-})->middleware('admin_auth')->name('admin.dashboard');
+//Route::get('/admin/dashboard', function () {
+//    return 'Bienvenido al dashboard de administrador';
+//})->middleware('admin_auth')->name('admin.dashboard');
+
+
+Route::middleware('admin_auth')->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [PedidoController::class, 'index'])->name('dashboard');
+    Route::get('/settings', [ProfileController::class, 'editAdmin'])->name('settings.edit');
+    Route::put('/settings', [ProfileController::class, 'updateAdmin'])->name('settings.update');
+});
+
+Route::post('/github-webhook', function (Request $request) {
+    // Lógica para manejar el webhook de GitHub
+    // Puedes registrar los datos recibidos en el log para depuración
+    \Log::info('Webhook recibido:', $request->all());
+
+    // Devuelve una respuesta exitosa
+    return response()->json(['status' => 'Webhook recibido correctamente'], 200);
+});

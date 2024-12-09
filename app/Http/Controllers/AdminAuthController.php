@@ -25,12 +25,14 @@ class AdminAuthController extends Controller
         // Verifica las credenciales en la base de datos
         $admin = \DB::table('admins')
             ->where('email', $email)
-            ->where('password', $password)
+            ->where('password', $password) // Se recomienda usar hash para las contraseñas en producción
             ->first();
 
         if ($admin) {
-            // Guardar sesión o redirigir al dashboard
+            // Guardar sesión del administrador
             session(['admin_logged_in' => true]);
+
+            // Redirigir al dashboard
             return redirect()->route('admin.dashboard');
         } else {
             return back()->withErrors(['login_error' => 'Credenciales incorrectas.']);

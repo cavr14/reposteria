@@ -72,4 +72,13 @@ class PedidoController extends Controller
         return redirect()->route('client.orders.index')->with('success', 'Pedido creado exitosamente');
     }
     
+    public function index()
+    {
+        // Obtener los pedidos con sus detalles relacionados
+        $pedidos = Pedido::with(['cliente', 'detallePedidos'])->orderBy('fecha_entrega', 'asc')->get();
+        return view('admin.dashboard', compact('pedidos'));
+        
+        
+    }
+
 }

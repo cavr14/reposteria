@@ -10,24 +10,33 @@ class Pedido extends Model
 {
     use HasFactory;
 
-    // Si la tabla no sigue la convención plural de Laravel, puedes especificar el nombre de la tabla
-    protected $table = 'pedido';
+    protected $table = 'pedido';  // Nombre de la tabla
     protected $primaryKey = 'ID_pedido';
 
-    public $timestamps = false; // Deshabilitar timestamps
-
-    // Especificar los campos que son "fillables" (masivos asignables)
     protected $fillable = [
-        'fecha_pedido',
+        'id',
         'fecha_entrega',
-        'ID_usuario',
-        'total',
-        'ID_detalle',
     ];
 
-    // Relación con el modelo DetallePedido
+    // Relación con la tabla Cliente
+    public function cliente()
+    {
+        return $this->belongsTo(User::class, 'id', 'id');
+    }
+    // Relación con la tabla DetallePedido
     public function detalles()
     {
         return $this->hasMany(DetallePedido::class, 'ID_pedido');
     }
+    public function detallePedidos()
+    {
+        return $this->hasMany(DetallePedido::class, 'ID_pedido', 'id');
+    }
+    
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'id');
+    }
+
 }
+
