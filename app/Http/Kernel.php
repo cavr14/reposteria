@@ -44,7 +44,11 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
-
+    protected $routeMiddleware = [
+        // Otros middlewares...
+        'admin_auth' => \App\Http\Middleware\AdminAuth::class,
+    ];
+    
     /**
      * The application's middleware aliases.
      *

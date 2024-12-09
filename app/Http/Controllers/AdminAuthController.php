@@ -3,41 +3,46 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class AdminAuthController extends Controller
 {
-    // Mostrar el formulario de login
+    /**
+     * Muestra el formulario de login para el administrador.
+     */
     public function showLoginForm()
     {
-        return view('auth.admin-login');
+        return view('admin.login'); // Asegúrate de tener la vista en resources/views/admin/login.blade.php
     }
 
-    // Procesar el login
+    /**
+     * Procesa el inicio de sesión del administrador.
+     */
     public function processLogin(Request $request)
     {
-        // Obtener las credenciales del formulario
         $email = $request->input('email');
         $password = $request->input('password');
 
-        // Verificar en la base de datos
-        $admin = DB::table('admins')
+        // Verifica las credenciales en la base de datos
+        $admin = \DB::table('admins')
             ->where('email', $email)
-            ->where('password', $password) // Comparación directa
+            ->where('password', $password)
             ->first();
 
         if ($admin) {
-            // Credenciales correctas, redirigir al dashboard
-            return redirect()->route('admin.dashboard')->with('success', '¡Bienvenido, ' . $admin->name . '!');
+            // Guardar sesión o redirigir al dashboard
+            session(['admin_logged_in' => true]);
+            return redirect()->route('admin.dashboard');
         } else {
-            // Credenciales incorrectas
-            return back()->with('error', 'Las credenciales son incorrectas.');
+            return back()->withErrors(['login_error' => 'Credenciales incorrectas.']);
         }
     }
 
-    // Mostrar el dashboard
-    public function dashboard()
+    /**
+     * Cierra la sesión del administrador.
+     */
+    public function logout()
     {
-        return view('auth.dashboard');
+        session()->forget('admin_logged_in');
+        return redirect()->route('admin.login');
     }
 }
